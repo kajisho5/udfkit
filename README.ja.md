@@ -1,3 +1,5 @@
+<p><img src="docs/images/logo/lockup-dark.svg" alt="udfkit" height="56"></p>
+
 # udfkit
 
 **DVD-Video** と **Blu-ray** のディスクイメージを、Python だけで書き出すライブラリです。外部プログラムも管理者権限も要らず、標準ライブラリ以外に依存しません。
@@ -60,6 +62,12 @@ python -m unittest discover -s tests -t .
 * **ffmpeg + dvdauthor + genisoimage**：本物の VIDEO_TS から作ったイメージが、`genisoimage -dvd-video -udf` と同じ大きさ・同じセクタ配置になること
 
 udfkit は、DVD・Blu-ray オーサリングアプリ [oncemore](https://github.com/kajisho5/oncemore) の一部として作られました。oncemore では、変更のたびにイメージを libdvdnav と libbluray で再生して確かめています。
+
+## 支援する
+
+udfkit は無料で、これからも無料です。役に立ったら [GitHub Sponsors](https://github.com/sponsors/kajisho5)（このリポジトリ上部の **Sponsor** ボタン）から開発を支援できます。不具合の報告も同じくらい助かります：[Issues](https://github.com/kajisho5/udfkit/issues)。
+
+ロゴ・色・文章の決まりは [docs/DESIGN.md](docs/DESIGN.md)（英語）にあります。
 
 ## ライセンス
 

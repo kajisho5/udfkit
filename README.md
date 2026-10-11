@@ -31,8 +31,14 @@ udfkit runs anywhere Python runs.
 ## Install
 
 ```sh
-pip install git+https://github.com/kajisho5/udfkit
+pip install udfkit
 ```
+
+A release is made by the version: when the version in `pyproject.toml`
+(and `udfkit/__init__.py`) reaches `main` without a tag of its own,
+`.github/workflows/release.yml` runs the tests, builds the package, makes
+the GitHub release with its tag and publishes to PyPI (trusted publishing,
+environment `pypi`). Merging the version bump is all it takes.
 
 ## Use
 

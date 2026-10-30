@@ -46,6 +46,7 @@ environment `pypi`). Merging the version bump is all it takes.
 udfkit dvd    path/to/disc  disc.iso --label MY_DISC   # disc/ holds VIDEO_TS (and AUDIO_TS, extras)
 udfkit bluray path/to/bd    bd.iso   --label MY_BD     # bd/ holds BDMV
 udfkit info   disc.iso
+udfkit contract --json                               # machine-readable contract (AI Video Production OS registry)
 ```
 
 ```python

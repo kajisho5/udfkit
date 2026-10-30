@@ -1,10 +1,12 @@
-"""Command line: `udfkit dvd|bluray SRC IMAGE --label NAME`, `udfkit info IMAGE`."""
+"""Command line: `udfkit dvd|bluray SRC IMAGE --label NAME`, `udfkit info IMAGE`,
+`udfkit contract [--json]`."""
 
 import argparse
 import json
 import sys
 
 from . import __version__, bluray, dvd, info
+from .contract import contract
 from .errors import UdfError
 
 
@@ -21,7 +23,12 @@ def main(argv=None):
         s.add_argument("--label", required=True, help="volume label (A-Z, 0-9, _; 1-32)")
     s = sub.add_parser("info", help="the volume names an image carries")
     s.add_argument("image")
+    s = sub.add_parser("contract", help="print the machine-readable contract (JSON)")
+    s.add_argument("--json", action="store_true", help="accepted; the output is always JSON")
     args = p.parse_args(argv)
+    if args.command == "contract":
+        print(json.dumps(contract(), indent=2))
+        return 0
     try:
         if args.command == "info":
             print(json.dumps(info.volume_names(args.image), indent=2, ensure_ascii=False))

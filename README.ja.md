@@ -38,6 +38,7 @@ pip install udfkit
 udfkit dvd    path/to/disc  disc.iso --label MY_DISC   # disc/ に VIDEO_TS（と AUDIO_TS・その他のファイル）
 udfkit bluray path/to/bd    bd.iso   --label MY_BD     # bd/ に BDMV
 udfkit info   disc.iso
+udfkit contract --json                               # machine-readable contract (AI Video Production OS registry)
 ```
 
 ```python

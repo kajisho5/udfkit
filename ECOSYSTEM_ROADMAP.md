@@ -23,6 +23,9 @@ Not reachable from the agent; encodes with ffmpeg directly.
 
 - [x] **1. (optional) Contract in the OS schema** — skill_id, version, provides[]
   - Done when: validates against the OS schema
+- [ ] **2. Checksum manifest and read-back verify** — the image's SHA-256 and a per-file manifest written beside it, and `verify IMAGE` reading the image back against them. Field review 2026-11-05 (Velisa ROADMAP, third round)
+  - なぜ要るか：プレス・複製に出すディスクイメージが壊れていないことを、納品書と一緒に示せる
+  - Done when: a corrupted byte in a fixture image fails verify with the file it belongs to
 
 ## Boundaries
 

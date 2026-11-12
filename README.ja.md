@@ -9,6 +9,7 @@
   * そのため、genisoimage と同じ大きさ、同じセクタ配置のイメージになります。
 * **Blu-ray**（`udfkit.bluray`）：BD-ROM が使う UDF 2.50 です（メタデータパーティション付き）。libbluray（libudfread 経由）が読める形式です。
 * **ボリューム名**（`udfkit.info`）：イメージの ISO 9660 と UDF のボリューム名を読みます。
+* **チェックサムマニフェスト**（`udfkit.manifest`）：イメージ全体と各ファイルの SHA-256 をイメージの横に書き出し、`udfkit verify` でイメージを読み戻して照合します。
 
 同じファイルと日時からは、毎回まったく同じバイト列のイメージができます。
 
@@ -37,6 +38,7 @@ pip install udfkit
 ```sh
 udfkit dvd    path/to/disc  disc.iso --label MY_DISC   # disc/ に VIDEO_TS（と AUDIO_TS・その他のファイル）
 udfkit bluray path/to/bd    bd.iso   --label MY_BD     # bd/ に BDMV
+udfkit verify disc.iso                               # disc.iso.manifest.json と照合
 udfkit info   disc.iso
 udfkit contract --json                               # machine-readable contract (AI Video Production OS registry)
 ```
@@ -49,6 +51,30 @@ bluray.write_image("bd", "bd.iso", "MY_BD")
 ```
 
 `dvd.write_image(..., shift=n)` を指定すると、VIDEO_TS の前に空のセクタを `n` 個置きます。2 層ディスクのレイヤーブレークを ECC ブロック（16 セクタ）の境界に合わせるためのものです。
+
+### チェックサムマニフェストと照合
+
+`udfkit dvd` と `udfkit bluray` は、イメージの横に 2 つのファイルを書きます（`--no-manifest` で書きません）。
+
+* `disc.iso.sha256`：イメージの SHA-256。`sha256sum -c disc.iso.sha256`（または `shasum -a 256 -c`）で確かめられる形式です。
+* `disc.iso.manifest.json`：イメージの大きさと SHA-256、各ファイルのパス・先頭セクタ・大きさ・SHA-256。ファイルのハッシュは書き出したイメージから読み戻して求めるので、イメージの中身そのものを表します。
+
+`udfkit verify disc.iso` はイメージをもう一度読んで照合します。変わったバイトは、それを含むファイル名で報告し、終了コードは 1 です。
+
+```
+udfkit: /work/disc.iso: /VIDEO_TS/VTS_01_1.VOB does not match the manifest
+  write the image again from its source folder, or copy it again
+```
+
+どのファイルにも属さない場所（ファイルシステムの構造）の破損は、そう報告します。`--json` で結果全体を JSON で出し、`--manifest PATH` で別の場所のマニフェストを読みます。Python からは次のとおりです。
+
+```python
+from udfkit import dvd, manifest
+
+stats = dvd.write_image("disc", "disc.iso", "MY_DISC")
+manifest.write_manifest("disc.iso", stats["extents"])
+print(manifest.verify("disc.iso")["bad_files"])     # 壊れていなければ []
+```
 
 ## テスト
 

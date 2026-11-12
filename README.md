@@ -12,6 +12,9 @@ programs, no root, no dependencies beyond the standard library.
 * **Blu-ray** (`udfkit.bluray`): UDF 2.50 with a metadata partition, as
   BD-ROM discs use and libbluray (through libudfread) reads.
 * **Volume names** (`udfkit.info`): the ISO 9660 and UDF names of an image.
+* **Checksum manifest** (`udfkit.manifest`): the image's SHA-256 and every
+  file's SHA-256, written beside the image, and `udfkit verify` reading the
+  image back against them.
 
 Images are deterministic: the same files and date give the same bytes.
 
@@ -45,6 +48,7 @@ environment `pypi`). Merging the version bump is all it takes.
 ```sh
 udfkit dvd    path/to/disc  disc.iso --label MY_DISC   # disc/ holds VIDEO_TS (and AUDIO_TS, extras)
 udfkit bluray path/to/bd    bd.iso   --label MY_BD     # bd/ holds BDMV
+udfkit verify disc.iso                               # read it back against disc.iso.manifest.json
 udfkit info   disc.iso
 udfkit contract --json                               # machine-readable contract (AI Video Production OS registry)
 ```
@@ -60,6 +64,37 @@ bluray.write_image("bd", "bd.iso", "MY_BD")
 
 `dvd.write_image(..., shift=n)` puts `n` empty sectors before VIDEO_TS. It is
 used to put a dual-layer disc's layer break on an ECC block (16 sectors).
+
+### Checksum manifest and verify
+
+`udfkit dvd` and `udfkit bluray` write two files beside the image
+(`--no-manifest` leaves them out):
+
+* `disc.iso.sha256`: the image's SHA-256, as `sha256sum -c disc.iso.sha256`
+  (or `shasum -a 256 -c`) reads it;
+* `disc.iso.manifest.json`: the image's size and SHA-256, and for every file
+  its path, first sector, size and SHA-256. The file hashes are read back
+  from the image, so they say what the image holds.
+
+`udfkit verify disc.iso` reads the image again and compares. A changed byte
+is reported with the file it belongs to; the exit status is 1:
+
+```
+udfkit: /work/disc.iso: /VIDEO_TS/VTS_01_1.VOB does not match the manifest
+  write the image again from its source folder, or copy it again
+```
+
+Damage outside every file (the file system structures) is reported as
+such. `--json` prints the whole result; `--manifest PATH` reads a manifest
+kept elsewhere. From Python:
+
+```python
+from udfkit import dvd, manifest
+
+stats = dvd.write_image("disc", "disc.iso", "MY_DISC")
+manifest.write_manifest("disc.iso", stats["extents"])
+print(manifest.verify("disc.iso")["bad_files"])     # [] when the image is intact
+```
 
 ## Tests
 

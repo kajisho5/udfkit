@@ -5,7 +5,7 @@ Written from a read-only audit of this repository on 2026-10-30. Each step below
 
 ## Where it stands
 
-v0.1.0, UDF image writer, CLI info, checksum manifest and `verify`. Python 3.11+ stdlib, unittest, CI on Ubuntu + macOS. Optional component (installed with --with-optional). oncemore vendors this library.
+v0.2.0, UDF image writer, CLI info, checksum manifest and `verify`. Python 3.11+ stdlib, unittest, CI on Ubuntu + macOS. Optional component (installed with --with-optional). oncemore vendors this library.
 
 ## What this repository owns
 

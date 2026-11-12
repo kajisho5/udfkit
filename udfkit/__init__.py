@@ -12,4 +12,4 @@
 No external programs and no dependencies beyond the standard library.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

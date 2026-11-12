@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "udfkit"
-version = "0.1.0"
+version = "0.2.0"
 description = "Write DVD-Video (UDF 1.02 + ISO 9660) and Blu-ray (UDF 2.50) disc images in pure Python"
 readme = "README.md"
 license = "Apache-2.0"

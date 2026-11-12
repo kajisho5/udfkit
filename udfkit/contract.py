@@ -17,6 +17,10 @@ TOOLS = [
     {"tool_id": "udfkit/info", "kind": "cli", "writes_media": False, "mutates_input": False,
      "description": "The volume names an image carries, as JSON",
      "argv": ["info", "<image>"]},
+    {"tool_id": "udfkit/verify", "kind": "cli", "writes_media": False, "mutates_input": False,
+     "description": "Read an image back against the SHA-256 manifest written beside it; "
+                    "names each file whose bytes changed (exit 1)",
+     "argv": ["verify", "<image>", "--json"]},
 ]
 
 
@@ -30,6 +34,7 @@ def contract():
             {"id": "disc_image.dvd", "lifecycle": "EXPERIMENTAL", "tool_id": "udfkit/dvd"},
             {"id": "disc_image.bluray", "lifecycle": "EXPERIMENTAL", "tool_id": "udfkit/bluray"},
             {"id": "disc_image.info", "lifecycle": "EXPERIMENTAL", "tool_id": "udfkit/info"},
+            {"id": "disc_image.verify", "lifecycle": "EXPERIMENTAL", "tool_id": "udfkit/verify"},
         ],
         # No Skill dependencies (ffmpeg-skill is not used).
         "dependencies": [],
@@ -41,7 +46,8 @@ def contract():
             "network access of any kind",
         ],
         "tools": TOOLS,
-        "python_api": "udfkit.dvd.write_image, udfkit.bluray.write_image, udfkit.info.volume_names",
+        "python_api": ("udfkit.dvd.write_image, udfkit.bluray.write_image, udfkit.info.volume_names, "
+                       "udfkit.manifest.write_manifest, udfkit.manifest.verify"),
         "execution": {"canonical_invocation": ["udfkit", "contract", "--json"],
                       "network": False, "shell": False},
     }

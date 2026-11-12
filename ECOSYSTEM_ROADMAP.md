@@ -5,7 +5,7 @@ Written from a read-only audit of this repository on 2026-10-30. Each step below
 
 ## Where it stands
 
-v0.1.0, UDF image writer, CLI info. Python 3.11+ stdlib, unittest, CI on Ubuntu + macOS. Optional component (installed with --with-optional). oncemore vendors this library.
+v0.1.0, UDF image writer, CLI info, checksum manifest and `verify`. Python 3.11+ stdlib, unittest, CI on Ubuntu + macOS. Optional component (installed with --with-optional). oncemore vendors this library.
 
 ## What this repository owns
 
@@ -23,7 +23,7 @@ Not reachable from the agent; encodes with ffmpeg directly.
 
 - [x] **1. (optional) Contract in the OS schema** — skill_id, version, provides[]
   - Done when: validates against the OS schema
-- [ ] **2. Checksum manifest and read-back verify** — the image's SHA-256 and a per-file manifest written beside it, and `verify IMAGE` reading the image back against them. Field review 2026-11-05 (Velisa ROADMAP, third round)
+- [x] **2. Checksum manifest and read-back verify** ([#13](https://github.com/kajisho5/udfkit/pull/13)) — the image's SHA-256 and a per-file manifest written beside it, and `verify IMAGE` reading the image back against them. Field review 2026-11-05 (Velisa ROADMAP, third round)
   - なぜ要るか：プレス・複製に出すディスクイメージが壊れていないことを、納品書と一緒に示せる
   - Done when: a corrupted byte in a fixture image fails verify with the file it belongs to
 
